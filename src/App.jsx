@@ -1,15 +1,20 @@
-import { BrowserRouter } from "react-router-dom";
-import { RecoilRoot } from "recoil";
-import Router from "./router";
+import { useState } from 'react'
+import './App.css'
+import Nav from './layouts/nav/nav'
+import Home from './modules/home/home'
 
 function App() {
+  const [count, setCount] = useState(0)
+
   return (
-    <RecoilRoot>
-      <BrowserRouter>
-        <Router />
-      </BrowserRouter>
-    </RecoilRoot>
-  );
+    <>
+      <div className='container'>
+
+      <Nav />
+      <Home />
+      </div>
+    </>
+  )
 }
 
-export default App;
+export default App
