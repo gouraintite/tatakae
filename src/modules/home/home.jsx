@@ -2,11 +2,13 @@ import Footer from "../../layouts/footer/footer";
 import Concerned from "./concerned";
 import Process from "./process";
 import Nav from "../../layouts/nav/nav";
+import Hero from "./hero";
 
 export default function Home() {
   return (
     <>
       <Nav />
+      <Hero />
       <div className="pt-16">
         <div className="xl:container m-auto px-6 text-gray-500 md:px-12">
           <div className="group w-auto">

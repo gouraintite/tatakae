@@ -4,7 +4,7 @@ import hire from "../../assets/images/hire.svg";
 
 export default function Concerned() {
   return (
-    <div className="pt-16 bg-gray/200 mx-20">
+    <div className="pt-16 bg-gray/200 mx-auto w-full">
       <div className="container m-auto px-6 text-gray-500 md:px-12 xl:px-0">
       <div className="group w-auto mb-16">
             <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-t from-primary to-green dark:from-primaryLight dark:to-secondaryLight md:text-4xl">

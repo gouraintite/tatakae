@@ -6,6 +6,7 @@ import { Routes, Route } from "react-router-dom";
 import Home from '../modules/home/home';
 import Login from '../modules/auth/login/login'
 import Register from '../modules/auth/Register/reg';
+import Profile from '../modules/profile/profile';
 // import NotFound from './pages/notFound/NotFound';
 
 const Router = () => {
@@ -16,12 +17,11 @@ const Router = () => {
 					<Routes>
 						
 						<Route path="/" >
-
 								<Route index element={<Home />} />
 
 								<Route  path="login" element={<Login />} />
 								<Route  path="register" element={<Register />} />
-
+								<Route  path="*" element={<Profile />} />
 							{/* <Route  path="*" element={ <NotFound /> } /> */}
 
 						</Route>

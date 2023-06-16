@@ -6,7 +6,9 @@
 *{
     font-family: 'Nunito';
  }
-
+body{
+    background-color: rgba(178, 228, 211, 0.162);
+}
 ::selection {
     background-color: #d9eef1;
 }
