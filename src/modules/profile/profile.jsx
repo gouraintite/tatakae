@@ -1,9 +1,4 @@
-// import {
-//     Lucide,
-//     LoadingIcon,
-//     Alert,
-//     Notification
-//   } from "@/base-components";
+import { Bars } from 'react-loading-icons'
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import Img from '../../assets/images/reset.svg'
@@ -24,6 +19,7 @@ import {GrDownload} from 'react-icons/gr';
 import {RiMoneyDollarCircleLine} from 'react-icons/ri';
 import {BsCameraVideoFill} from 'react-icons/bs';
 import Nav from "../../layouts/nav/nav";
+
 import {
     PencilIcon,
   } from "@heroicons/react/24/outline";
@@ -37,7 +33,7 @@ import CreatableSelect from 'react-select/creatable';
     const [new_password, setNew_password] = useState('');
     const [renew_password, setRenew_password] = useState('');
     const [errMsg, setErrMsg] = useState(null);
-    const [isLoading, setIsLoading] = useState(null);
+    const [loading, setLoading] = useState(null);
     const [hide, setHide] = useState("password");
     const [me, setME] = useState(JSON.parse(localStorage.getItem('client')) || {
         owner: "string",
@@ -78,15 +74,13 @@ import CreatableSelect from 'react-select/creatable';
       imagePreviewUrl1: '',
     });
     const basicNonStickyNotification = useRef();
-    const basicNonStickyNotificationUpdateProfile = useRef();
-
   
     useEffect(() => {
       setTimeout(() => {
         handleProfile();
       }, 2000);
       setErrMsg(null)
-      setIsLoading('')
+      setLoading('')
     }, []);
   
     const handleProfile = () => {
@@ -146,29 +140,30 @@ import CreatableSelect from 'react-select/creatable';
       reader1.readAsDataURL(file)  
       }
   
-    const handleSubmitUpdatedProfile = async (e) => {
+    const handleSubmitUpdatedProfile = (e) => {
+      console.log(client, 'data client here');
       e.preventDefault();
-      setIsLoading('......')
-      console.log('is loading before req', isLoading)
+      setLoading(<p>
+        <Bars stroke="#98ff98" className='h-4 w-4' speed={.75} />
+      </p>)
       console.log(client, 'data client here')
   
-    //   update_profile_service({...client, profile_picture:selectedFile.file1})
-    //     .then(response => {
-    //       //navigator('/')
-    //       console.log(response, 'response upload client')
-    //       basicNonStickyNotification.current.showToast();
-    //       handleProfile();
-    //     })
-    //     .catch(err => {
-    //       console.log(localStorage.getItem('userToken'), 'user Token here error upload client')
-    //       const error = err?.response?.data?.message;
-    //       console.log(error, "error ye")
-    //       //console.log(err?.response?.data?.detail, "error content")
-    //       setErrMsg(error);
-    //     })
-    //     .finally(
-    //       setIsLoading('')
-    //     )
+      axiosInstance.put(`${import.meta.env.VITE_API_URL}profile`, {...client})
+        .then(response => {
+          //navigator('/')
+          console.log(response, 'response upload client')
+          basicNonStickyNotification.current.showToast();
+          handleProfile();
+          setTimeout(() => {
+            setLoading(null)
+          }, 1000);
+        })
+        .catch(err => {
+          console.log(localStorage.getItem('token'), 'user Token here error upload client')
+          console.log(error, "error ye")
+          //console.log(err?.response?.data?.detail, "error content")
+          setErrMsg(err);
+        })
     }
   
     return (
@@ -233,8 +228,8 @@ import CreatableSelect from 'react-select/creatable';
                     </div>
                     <div className="intro-x flex justify-between text-slate-600 dark:text-slate-500 text-xs sm:text-sm mx-4  mt-4 xl:mt-8 ">
                       <div className="">
-                        <Button type='submit' color="blue" className="bg-primary rounded-full py-2 item-center">
-                          Change {isLoading}
+                        <Button type='submit' color="blue" className="bg-primary rounded-full py-2 item-center flex">
+                          <span></span> {loading}
                         </Button>
                       </div>
                       <div className="intro-x py-2">
@@ -288,7 +283,7 @@ import CreatableSelect from 'react-select/creatable';
             </div>
             <div className="col-span-12 lg:col-span-8 2xl:col-span-9">
               {/* END: Profile Menu */}
-              <form onSubmit={handleSubmitUpdatedProfile}>
+              <form onSubmit={(e)=>{handleSubmitUpdatedProfile(e)}}>
                 {/* BEGIN: Display Information */}
                 <div className="intro-y box lg:mt-5 bg-white">
                   <div className="flex items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
@@ -304,7 +299,7 @@ import CreatableSelect from 'react-select/creatable';
                     </h2>
                   </div>
                   <div className="p-5 shadow-lg rounded-lg">
-                    <div className="flex flex-col-reverse xl:flex-row flex-col">
+                    <div className="flex xl:flex-row flex-col">
                       <div className="flex-1 mt-6 xl:mt-0">
                         <div className="grid grid-cols-12 gap-x-5">
                           <div className="col-span-12 2xl:col-span-6">
@@ -317,10 +312,12 @@ import CreatableSelect from 'react-select/creatable';
                               </label>
                               <input
                                 type='text'
-                                className="form-control py-3 w-11/12 mt-2 px-2 border rounded-lg border-b-green"
+                                className="form-control py-3 w-11/12 mt-2 px-2 border focus:outline-none focus:border-b-2 rounded-lg border-b-green"
                                 placeholder="First Name"
-                                onChange={(e) => setOld_password(e.target.value)}
-                                value={me.details.first_name}
+                                onChange={(e) => 
+                                  setClient({...client, details:{...client.details, first_name: e.target.value}})
+                                }
+                                value={client.details.first_name}
                                 required
                               />
                             </div>
@@ -333,10 +330,12 @@ import CreatableSelect from 'react-select/creatable';
                               </label> <br />
                               <input
                                 type='text'
-                                className="form-control py-3 w-11/12 mt-2 px-2 border rounded-lg border-b-green"
+                                className="form-control py-3 w-11/12 mt-2 px-2 border focus:outline-none focus:border-b-2 rounded-lg border-b-green"
                                 placeholder="Country"
-                                onChange={(e) => setOld_password(e.target.value)}
-                                value={'Cameroon'}
+                                onChange={(e) => 
+                                  setClient({...client, details:{...client.details, country: e.target.value}})
+                                }
+                                value={client.details.country}
                                 required
                               />
                             </div>
@@ -351,10 +350,12 @@ import CreatableSelect from 'react-select/creatable';
                               </label> <br />
                               <input
                                 type='email'
-                                className="form-control py-3 w-11/12 mt-2 px-2 border rounded-lg border-b-green"
+                                className="form-control py-3 w-11/12 mt-2 px-2 border focus:outline-none focus:border-b-2 rounded-lg border-b-green"
                                 placeholder="Email"
-                                onChange={(e) => setOld_password(e.target.value)}
-                                value={me.owner}
+                                onChange={(e) => {
+                                  setClient({...client, details:{...client.details, email: e.target.value}})
+                                }}
+                                value={client.owner}
                                 required
                               />
                             </div>
@@ -366,11 +367,13 @@ import CreatableSelect from 'react-select/creatable';
                                 Last name
                               </label>
                               <input
-                                type={hide}
-                                className="form-control py-3 w-11/12 mt-2 px-2 border rounded-lg border-b-green"
-                                placeholder="Old password"
-                                onChange={(e) => setOld_password(e.target.value)}
-                                value={old_password}
+                                type='type'
+                                className="form-control py-3 w-11/12 mt-2 px-2 border focus:outline-none focus:border-b-2 rounded-lg border-b-green"
+                                placeholder=""
+                                onChange={(e) => {
+                                  setClient({...client, details:{...client.details, last_name: e.target.value}})
+                                }}
+                                value={client.details.last_name}
                                 required
                               />
                             </div>
@@ -387,7 +390,8 @@ import CreatableSelect from 'react-select/creatable';
                                 variant="static"
                                 color="orange"
                                 size="md"
-                                className="py-6 px-12  text-gray rounded-t-lg  border-b-green ">
+                                className="py-6 px-12  text-gray rounded-t-lg focus:outline-none focus:border-b-2 border-b-green "
+                                >
                                 <Option defaultValue >🇬🇧 &nbsp; English</Option>
                                 <Option>🇫🇷 &nbsp; Français</Option>
                                 <Option>🇧🇪 &nbsp; Deutsch</Option>
@@ -395,14 +399,19 @@ import CreatableSelect from 'react-select/creatable';
                             </div>
                           </div>
                         </div>
-                        <Button type="submit" color="blue" className="bg-primary w-24 p-2 rounded-full mt-6">
-                          Save
-                        </Button>
+                        
+                      <button
+                        type="submit"
+                        className="py-2 px-6 mt-3 inline-flex justify-center items-center gap-2 rounded-lg border border-transparent font-semibold bg-primary text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800"
+                      >
+                        Save
+                        {loading}
+                      </button>
                       </div>
                       <div className="w-52 mx-auto xl:mr-0 xl:ml-6 -mt-9">
                           <div className="flex space-x-6 mt-5 rounded-lg justify-around">
                             <div className='items-center py-9 rounded' >
-                                <div className="shrink-0 p-1 rounded-full ring ring-4 ring-green">
+                                <div className="shrink-0 p-1 rounded-full ring-4 ring-green">
                                   <img className="h-36 w-36 mx-auto object-cover rounded-full zoom-in" src={Img} alt="No image yet selected" />
                                 </div>
                               <label className="block">
@@ -442,7 +451,7 @@ import CreatableSelect from 'react-select/creatable';
                     </h2>
                   </div>
                   <div className="w-10/12 py-3 flex mx-auto">
-                    <Skills />
+                    <Skills me={me} />
                   </div>
                 </div>
                 {/* END: Display Information */}
@@ -529,8 +538,8 @@ export function TabDetail() {
       ),
     },
     {
-      label: "Files",
-      value: "html",
+      label: "in feeds",
+      value: "feed",
       desc: (   
         <> 
           <div className="grid grid-cols-4 gap-x-20 items-center my-3">
@@ -664,7 +673,7 @@ export function TabDetail() {
   );
 }
 
-function Skills() {
+function Skills({me}) {
     
     const options = [
         { value: 'Html', label: 'Html' },
@@ -687,7 +696,9 @@ function Skills() {
                         </p>
                     </div>
                     <p className="ml-3">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus ut minus optio quod accusantium inventore tenetur est sapiente iste tempora reprehenderit, aut reiciendis porro magnam voluptatum corrupti adipisci suscipit ratione!
+                      {
+                        me.details.bio
+                      }
                     </p>
                   </div>
 

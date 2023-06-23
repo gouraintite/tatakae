@@ -40,7 +40,6 @@ export default function Register(){
       handleProfile()
       navigate('/profile');
       localStorage.setItem('token', res.data.access_token);
-      
     }) 
     .catch(err => {
       console.log(err);
