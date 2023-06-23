@@ -143,14 +143,14 @@ import CreatableSelect from 'react-select/creatable';
           imagePreviewUrl1: reader1.result
         });
       }
-      reader1.readAsDataURL(file)
+      reader1.readAsDataURL(file)  
       }
   
     const handleSubmitUpdatedProfile = async (e) => {
       e.preventDefault();
       setIsLoading('......')
       console.log('is loading before req', isLoading)
-      console.log(client, 'data client')
+      console.log(client, 'data client here')
   
     //   update_profile_service({...client, profile_picture:selectedFile.file1})
     //     .then(response => {
@@ -417,7 +417,7 @@ import CreatableSelect from 'react-select/creatable';
                                     onChange={(event) => {handleImageChange1(event)}}
                                   />
                                 </div>
-                              </label>
+                              </label> 
                             </div>
                           </div>
                       </div>
