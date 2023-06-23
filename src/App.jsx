@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './App.css'
-import { HashRouter,  } from "react-router-dom";
+import { BrowserRouter,  } from "react-router-dom";
 import Router from './router/router'
 
 function App() {
@@ -8,9 +8,9 @@ function App() {
 
   return (
     <>
-      <HashRouter>
+      <BrowserRouter>
         <Router />
-      </HashRouter>
+      </BrowserRouter>
     </>
   )
 }
