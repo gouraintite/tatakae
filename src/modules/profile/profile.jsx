@@ -25,12 +25,9 @@ import {RiMoneyDollarCircleLine} from 'react-icons/ri';
 import {BsCameraVideoFill} from 'react-icons/bs';
 import Nav from "../../layouts/nav/nav";
 import {
-    CloudArrowUpIcon,
-    ArrowLongRightIcon,
-    ArrowPathIcon,
     PencilIcon,
   } from "@heroicons/react/24/outline";
-
+import axiosInstance from "../../config/axios";
 import CreatableSelect from 'react-select/creatable';
 //  import { change_password_service, profile_service, update_profile_service } from "../auth/services/auth.service";
   
@@ -43,34 +40,38 @@ import CreatableSelect from 'react-select/creatable';
     const [isLoading, setIsLoading] = useState(null);
     const [hide, setHide] = useState("password");
     const [me, setME] = useState(JSON.parse(localStorage.getItem('client')) || {
-        user: {
-          first_name: 'me.user.first_name',
-          last_name: 'me.user.last_name',
-          email: 'me.user.email',
-          username: 'me.user.username',
-      },
-        phone_number: 'me.phone_number',
-        country: 'me.country',
-        city: 'me.city',
-        address: 'me.address',
-        postal_code: 'me.postal_code',
-        company: 'me.company',
-        profile_picture  : 'me.profile_picture' 
+        owner: "string",
+        details: {
+          first_name: "",
+          last_name: "",
+          country: "",
+          language: "",
+          bio: ""
+        },
+        skills: [
+          {
+            name: "string",
+            grade: "string",
+            numeric_value: 1
+          }
+        ]
       })
     const [client, setClient] = useState({
-      user: {
-        first_name: me.user.first_name,
-        last_name: me.user.last_name,
-        email: me.user.email,
-        username: me.user.username,
-    },
-      phone_number: me.phone_number,
-      country: me.country,
-      city: me.city,
-      address: me.address,
-      postal_code: me.postal_code,
-      company: me.company,
-      profile_picture  : me.profile_picture 
+      owner: me.owner,
+      details: {
+        first_name: me.details.first_name,
+        last_name: me.details.last_name,
+        country: me.details.country,
+        language: me.details.language,
+        bio: me.details.bio
+      },
+      skills: [
+        {
+          name: me.skills.name,
+          grade: me.skills.grade,
+          numeric_value: me.skills.numeric_value
+        }
+      ]
     })
     const [selectedFile, setSelectedFile] = useState({
       file1: me.profile_picture,
@@ -88,19 +89,19 @@ import CreatableSelect from 'react-select/creatable';
       setIsLoading('')
     }, []);
   
-    // const handleProfile = () => {
-    //   profile_service()
-    //     .then(res => {
-    //       console.log(res?.data, 'my data');
-    //       setME(res?.data)
-    //       localStorage.setItem('client', JSON.stringify(res?.data))
-    //       console.log(JSON.parse(localStorage.getItem('client')), 'handleprofile');
+    const handleProfile = () => {
+      axiosInstance.get(`${import.meta.env.VITE_API_URL}profile`)
+        .then(res => {
+          console.log(res?.data, 'my data');
+          setME(res?.data)
+          localStorage.setItem('client', JSON.stringify(res?.data))
+          console.log(JSON.parse(localStorage.getItem('client')), 'handleprofile');
         
-    //     }).catch(err => {
-    //       console.log(err, 'my data error');
-    //     }).finally(
-    //       console.log(' finally my data'))
-    // }
+        }).catch(err => {
+          console.log(err, 'my data error');
+        }).finally(
+          console.log(' finally my data'))
+    }
   
     const handleSubmitChangePassword = async (e) => {
     //   e.preventDefault();
@@ -170,20 +171,7 @@ import CreatableSelect from 'react-select/creatable';
     //     )
     }
   
-    return ( //       //navigator('/')
-    //       console.log(response, 'response')
-    //       basicNonStickyNotification.current.showToast();
-    //     })
-    //     .catch(err => {
-    //       console.log(localStorage.getItem('userToken'), 'user Token here error')
-    //       const error = err?.response?.data?.message;
-    //       console.log(error, "error ye")
-    //       //console.log(err?.response?.data?.detail, "error content")
-    //       setErrMsg(error);
-    //     })
-    //     .finally(
-    //       setIsLoading('')
-    //     )
+    return (
       <>
       <Nav />
         <div className="container mx-auto w-11/12 text-start">
@@ -328,11 +316,11 @@ import CreatableSelect from 'react-select/creatable';
                                 First name
                               </label>
                               <input
-                                type={hide}
+                                type='text'
                                 className="form-control py-3 w-11/12 mt-2 px-2 border rounded-lg border-b-green"
                                 placeholder="First Name"
                                 onChange={(e) => setOld_password(e.target.value)}
-                                value={old_password}
+                                value={me.details.first_name}
                                 required
                               />
                             </div>
@@ -342,13 +330,13 @@ import CreatableSelect from 'react-select/creatable';
                                 className="form-label"
                               >
                                 Country
-                              </label>
+                              </label> <br />
                               <input
                                 type='text'
                                 className="form-control py-3 w-11/12 mt-2 px-2 border rounded-lg border-b-green"
                                 placeholder="Country"
                                 onChange={(e) => setOld_password(e.target.value)}
-                                value={old_password}
+                                value={'Cameroon'}
                                 required
                               />
                             </div>
@@ -366,7 +354,7 @@ import CreatableSelect from 'react-select/creatable';
                                 className="form-control py-3 w-11/12 mt-2 px-2 border rounded-lg border-b-green"
                                 placeholder="Email"
                                 onChange={(e) => setOld_password(e.target.value)}
-                                value={old_password}
+                                value={me.owner}
                                 required
                               />
                             </div>
@@ -400,7 +388,7 @@ import CreatableSelect from 'react-select/creatable';
                                 color="orange"
                                 size="md"
                                 className="py-6 px-12  text-gray rounded-t-lg  border-b-green ">
-                                <Option>🇬🇧 &nbsp; English</Option>
+                                <Option defaultValue >🇬🇧 &nbsp; English</Option>
                                 <Option>🇫🇷 &nbsp; Français</Option>
                                 <Option>🇧🇪 &nbsp; Deutsch</Option>
                               </Select>

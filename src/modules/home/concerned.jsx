@@ -8,7 +8,7 @@ export default function Concerned() {
       <div className="container m-auto px-6 text-gray-500 md:px-12 xl:px-0">
       <div className="group w-auto mb-16">
             <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-t from-primary to-green dark:from-primaryLight dark:to-secondaryLight md:text-4xl">
-              Concerned
+              Concerned people
               <p className="text-lg text-black">Who can benefit from this service</p>
               <p className="w-2 translate-x-0 transition duration-300 group-hover:translate-x-4 group-hover:w-36 relative rounded-full mx-auto bg-primary h-1"></p>
             </h2>
